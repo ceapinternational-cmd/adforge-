@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AdForge PRO 2.0 — Générateur de pubs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Poppins:wght@400;600;800;900&family=Montserrat:wght@400;600;800;900&family=Playfair+Display:wght@600;800;900&family=Bebas+Neue&family=Anton&family=Oswald:wght@500;700&family=Raleway:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0F;--panel:#14141C;--panel2:#1B1B26;--border:#26263A;--text:#F5F5F7;--muted:#8A8A99;--accent:#FF3366;--accent2:#7C4DFF;--ok:#19C37D}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif}
+header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,15,.95);backdrop-filter:blur(10px);z-index:10;flex-wrap:wrap}
+header .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px}
+header h1{font-size:17px;margin:0;font-weight:800;display:flex;align-items:center;gap:8px}
+header h1 .pro{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;font-size:10px;border:1px solid var(--accent);padding:2px 6px;border-radius:6px;-webkit-text-fill-color:transparent}
+header .tag{font-size:12px;color:var(--muted);margin-left:auto}
+.layout{display:grid;grid-template-columns:1fr 460px;gap:20px;padding:20px;max-width:1400px;margin:0 auto}
+@media (max-width:960px){.layout{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+.panel h2{font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin:0 0 12px 0;font-weight:700}
+label{display:block;font-size:12px;color:var(--muted);margin:10px 0 6px;font-weight:600}
+input[type=text],input[type=number],select,textarea{width:100%;background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;resize:vertical}
+input[type=text]:focus,select:focus,textarea:focus,input[type=number]:focus{border-color:var(--accent)}
+input[type=range]{width:100%;margin:6px 0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.btn{cursor:pointer;border:none;border-radius:10px;padding:11px 14px;font-weight:700;font-size:14px;font-family:inherit;transition:.15s;color:var(--text);background:var(--panel2);border:1px solid var(--border)}
+.btn:hover{border-color:var(--accent)}
+.btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;padding:14px;font-size:15px;width:100%}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.thumb{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;background:#000;border:1px solid var(--border)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb .x{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.7);border:none;color:#fff;width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:12px;line-height:1}
+.thumb .n{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.7);color:#fff;font-size:10px;padding:2px 6px;border-radius:6px}
+.templates{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tpl{cursor:pointer;background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:10px;transition:.15s}
+.tpl:hover{border-color:var(--accent)}
+.tpl.active{border-color:var(--accent);background:#221022}
+.tpl .t{font-size:13px;font-weight:700;margin-bottom:2px}
+.tpl .d{font-size:11px;color:var(--muted);line-height:1.3}
+.badges{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.badge-btn{cursor:pointer;background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;transition:.15s}
+.badge-btn:hover{border-color:var(--accent)}
+.badge-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent}
+.colors{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.colors input[type=color]{width:100%;height:42px;border:1px solid var(--border);border-radius:10px;background:var(--panel2);cursor:pointer;padding:3px}
+.preview-wrap{position:sticky;top:80px}
+.canvas-box{background:#000;border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:10px}
+canvas{max-width:100%;max-height:70vh;display:block;border-radius:8px}
+.actions{display:flex;gap:8px;margin-top:12px}
+.actions .btn{flex:1}
+.status{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;min-height:16px}
+.status.ok{color:var(--ok)}
+.status.work{color:var(--accent)}
+.progressbar{height:4px;background:var(--panel2);border-radius:2px;overflow:hidden;margin-top:10px}
+.progressbar>div{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;transition:width .1s}
+.file-drop{border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:.15s;color:var(--muted);font-size:13px}
+.file-drop:hover{border-color:var(--accent);color:var(--text)}
+.file-drop input{display:none}
+.download{display:none;margin-top:12px;text-align:center}
+.download a{display:inline-block;background:var(--ok);color:#000;font-weight:800;padding:12px 20px;border-radius:10px;text-decoration:none}
+.hint{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}
+.per-photo{margin-top:8px;padding:10px;background:var(--panel2);border-radius:10px;border:1px solid var(--border)}
+.per-photo .n{font-size:11px;color:var(--accent);font-weight:700;margin-bottom:6px}
+.per-photo input{margin-bottom:6px;font-size:13px;padding:8px 10px}
+.mic-rec{background:#FF3366 !important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">A</div>
+  <h1>AdForge <span class="pro">PRO 2.0</span></h1>
+  <span class="tag">Pubs courtes · 100% local · illimité</span>
+</header>
+
+<div class="layout">
+  <div>
+    <div class="panel">
+      <h2>1 · Photos</h2>
+      <label class="file-drop" for="filePhotos">📸 Touche pour choisir tes photos<input id="filePhotos" type="file" accept="image/*" multiple /></label>
+      <div class="thumbs" id="thumbs"></div>
+    </div>
+    <div class="panel"><h2>2 · Modèle de pub</h2><div class="templates" id="templates"></div></div>
+    <div class="panel">
+      <h2>3 · Format</h2>
+      <div class="row3" id="formats"></div>
+      <label>Durée</label>
+      <div class="row3" id="durations"></div>
+      <label>Durée personnalisée (secondes)</label>
+      <input type="number" id="customDuration" min="3" max="180" value="15" />
+    </div>
+    <div class="panel">
+      <h2>4 · Textes globaux</h2>
+      <label>Titre principal</label><input type="text" id="headline" value="Découvrez notre nouveauté" maxlength="60"/>
+      <label>Sous-titre</label><input type="text" id="subtext" value="Qualité premium · Livraison rapide" maxlength="80"/>
+      <div class="row">
+        <div><label>Bouton (CTA)</label><input type="text" id="cta" value="Acheter maintenant" maxlength="30"/></div>
+        <div><label>Nom de marque</label><input type="text" id="brand" value="@MaMarque" maxlength="24"/></div>
+      </div>
+      <div class="row">
+        <div><label>Prix</label><input type="text" id="price" value="19,99€" maxlength="14"/></div>
+        <div><label>Promo / badge</label><input type="text" id="promo" value="-30%" maxlength="10"/></div>
+      </div>
+    </div>
+    <div class="panel"><h2>5 · Texte par photo</h2><div class="hint">Laisse vide pour utiliser le texte global.</div><div id="perPhotoTexts"></div></div>
+    <div class="panel">
+      <h2>6 · Police & position</h2>
+      <label>Police d'écriture</label>
+      <select id="fontFamily">
+        <option value="Inter">Inter (moderne)</option>
+        <option value="Poppins">Poppins (rond)</option>
+        <option value="Montserrat">Montserrat (élégant)</option>
+        <option value="Playfair Display">Playfair (luxe)</option>
+        <option value="Bebas Neue">Bebas Neue (impact)</option>
+        <option value="Anton">Anton (très gras)</option>
+        <option value="Oswald">Oswald (condensé)</option>
+        <option value="Raleway">Raleway (fin)</option>
+      </select>
+      <label>Position du texte</label>
+      <div class="row3" id="textPositions"></div>
+    </div>
+    <div class="panel"><h2>7 · Animation de l'image</h2><div class="templates" id="animations"></div></div>
+    <div class="panel"><h2>8 · Badge animé</h2><div class="badges" id="badges"></div><input type="text" id="customBadge" placeholder="Ou écris ton propre badge" maxlength="20"/></div>
+    <div class="panel">
+      <h2>9 · Voix off</h2>
+      <label>Mode</label>
+      <select id="voiceMode">
+        <option value="native">Voix native (aperçu uniquement)</option>
+        <option value="api">Voix humaine IA (dans la vidéo) 🎬</option>
+        <option value="mic">🎤 Enregistrer ma propre voix</option>
+      </select>
+      <label>Texte à lire</label>
+      <textarea id="voiceText" rows="3" maxlength="200">Découvrez notre nouveauté. Qualité premium, livraison rapide. Commandez maintenant.</textarea>
+      <label>Voix (mode API)</label>
+      <select id="voiceSelect">
+        <option value="fr-FR-Wavenet-D">Français · Femme humaine</option>
+        <option value="fr-FR-Wavenet-B">Français · Homme humain</option>
+        <option value="fr-FR-Wavenet-A">Français · Femme 2</option>
+        <option value="fr-FR-Wavenet-C">Français · Homme 2</option>
+      </select>
+      <div class="actions"><button class="btn" id="btnVoiceTest">🔊 Tester</button><button class="btn" id="btnMicRecord">🎤 Enregistrer</button></div>
+      <div class="hint" id="voiceStatus"></div>
+    </div>
+    <div class="panel">
+      <h2>10 · Logo (optionnel)</h2>
+      <label class="file-drop" for="fileLogo">🖼️ Choisir un logo (PNG transparent)<input id="fileLogo" type="file" accept="image/*" /></label>
+      <label>Position</label>
+      <select id="logoPos">
+        <option value="top-left">Haut gauche</option>
+        <option value="top-right">Haut droite</option>
+        <option value="bottom-left">Bas gauche</option>
+        <option value="bottom-right">Bas droite</option>
+      </select>
+      <div class="hint" id="logoStatus">Aucun logo</div>
+    </div>
+    <div class="panel">
+      <h2>11 · Musique</h2>
+      <label>Bibliothèque intégrée</label>
+      <div class="row3" id="musicLibrary"></div>
+      <label>Ou importe un fichier</label>
+      <label class="file-drop" for="fileMusic">🎵 Choisir un MP3<input id="fileMusic" type="file" accept="audio/*" /></label>
+      <div class="hint" id="musicName">Aucune musique</div>
+      <label>Volume : <span id="musicVolLabel">30%</span></label>
+      <input type="range" id="musicVolume" min="0" max="100" value="30" />
+    </div>
+    <div class="panel">
+      <h2>12 · Couleurs</h2>
+      <div class="colors">
+        <div><label>Primaire</label><input type="color" id="c1" value="#FF3366"/></div>
+        <div><label>Secondaire</label><input type="color" id="c2" value="#7C4DFF"/></div>
+        <div><label>Fond</label><input type="color" id="c3" value="#0A0A0F"/></div>
+      </div>
+    </div>
+  </div>
+  <div class="preview-wrap">
+    <div class="panel">
+      <h2>Aperçu live</h2>
+      <div class="canvas-box"><canvas id="canvas" width="1080" height="1920"></canvas></div>
+      <div class="progressbar"><div id="pbar"></div></div>
+      <div class="actions"><button class="btn" id="btnPlay">▶︎ Lire</button><button class="btn" id="btnStop">■ Stop</button></div>
+      <div class="actions"><button class="btn-primary" id="btnGen">🎬 Générer la vidéo</button></div>
+      <div class="status" id="status"></div>
+      <div class="download" id="download"></div>
+      <div class="hint">⚠️ Ne change pas d'onglet pendant la génération.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const FORMATS={'9:16':{w:1080,h:1920},'1:1':{w:1080,h:1080},'4:5':{w:1080,h:1350},'16:9':{w:1920,h:1080}};
+const TEMPLATES={
+  showcase:{name:'Vitrine',desc:'Zoom lent + texte bas'},
+  promo:{name:'Promo flash',desc:'Réduction géante'},
+  story:{name:'Story ciné',desc:'Photos séquentielles'},
+  testimonial:{name:'Témoignage',desc:'5 étoiles + citation'},
+  beforeafter:{name:'Avant/Après',desc:'Comparaison glissière'},
+  lifestyle:{name:'Lifestyle',desc:'Bandes cinéma élégantes'},
+  kungfu:{name:'Kung-fu',desc:'Action + lignes de vitesse'},
+  hiphop:{name:'Hip-hop',desc:'Urbain + texte massif'},
+  unboxing:{name:'Unboxing',desc:'Révélation produit'},
+  blackfriday:{name:'Black Friday',desc:'Fond noir + rouge'}
+};
+const ANIMATIONS={
+  kenburns:{name:'Ken Burns',desc:'Zoom + pan cinématique'},
+  breathe:{name:'Respiration',desc:'Zoom pulsé doux'},
+  parallax:{name:'Parallax',desc:'Décalage multi-plans'},
+  float:{name:'Flottement',desc:'Mouvement flottant'},
+  zoompunch:{name:'Zoom Punch',desc:'Zoom sec + recul'}
+};
+const BADGE_PRESETS=['','NOUVEAU','SOLDE','PROMO','STOCK LIMITÉ','LIVRAISON GRATUITE','-50%','BLACK FRIDAY'];
+
+const state={photos:[],template:'showcase',format:'9:16',duration:15,headline:'Découvrez notre nouveauté',subtext:'Qualité premium · Livraison rapide',cta:'Acheter maintenant',brand:'@MaMarque',price:'19,99€',promo:'-30%',c1:'#FF3366',c2:'#7C4DFF',c3:'#0A0A0F',badge:'',customBadge:'',voiceMode:'native',voiceText:'Découvrez notre nouveauté. Qualité premium, livraison rapide. Commandez maintenant.',voiceSelect:'fr-FR-Wavenet-D',fontFamily:'Inter',textPosition:'bottom',animation:'kenburns',logoImg:null,logoPos:'top-right',perPhotoTexts:[],musicFile:null,musicTrack:null,musicVolume:0.3,recordedVoice:null,playing:false,t:0,rafId:null,startTs:0};
+
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+
+const easeOut=p=>1-Math.pow(1-p,3);
+const easeOutBack=p=>{const c1=1.70158,c3=c1+1;return 1+c3*Math.pow(p-1,3)+c1*Math.pow(p-1,2);};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function hexToRgba(hex,a=1){const h=hex.replace('#','');return`rgba(${parseInt(h.substring(0,2),16)},${parseInt(h.substring(2,4),16)},${parseInt(h.substring(4,6),16)},${a})`;}
+function roundedRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+function drawPhotoCover(c,img,x,y,w,h,zoom=1,panX=0,panY=0,opacity=1){const iw=img.naturalWidth||img.width;const ih=img.naturalHeight||img.height;const scale=Math.max(w/iw,h/ih)*zoom;const dw=iw*scale,dh=ih*scale;const dx=x+(w-dw)/2+panX;const dy=y+(h-dh)/2+panY;const old=c.globalAlpha;c.globalAlpha=old*opacity;c.drawImage(img,dx,dy,dw,dh);c.globalAlpha=old;}
+function drawTextShadow(c,text,x,y,{size=48,weight=800,color='#fff',shadow=true,align='center'}={}){c.save();c.font=`${weight} ${size}px ${state.fontFamily}, sans-serif`;c.textAlign=align;c.textBaseline='middle';if(shadow){c.shadowColor='rgba(0,0,0,0.65)';c.shadowBlur=18;c.shadowOffsetY=4;}c.fillStyle=color;c.fillText(text,x,y);c.restore();}
+function wrapText(c,text,maxWidth,font){c.save();c.font=font;const words=text.split(' ');const lines=[];let line='';for(const w of words){const test=line?line+' '+w:w;if(c.measureText(test).width>maxWidth&&line){lines.push(line);line=w;}else line=test;}if(line)lines.push(line);c.restore();return lines;}
+function drawWrapped(c,text,cx,cy,maxWidth,{size=54,weight=800,color='#fff',lineHeight=1.15,align='center'}={}){const font=`${weight} ${size}px ${state.fontFamily}, sans-serif`;const lines=wrapText(c,text,maxWidth,font);const lh=size*lineHeight;const total=lines.length*lh;const startY=cy-total/2+lh/2;c.save();c.font=font;c.textAlign=align;c.textBaseline='middle';c.shadowColor='rgba(0,0,0,0.7)';c.shadowBlur=20;c.shadowOffsetY=4;c.fillStyle=color;lines.forEach((l,i)=>c.fillText(l,cx,startY+i*lh));c.restore();}
+function getTextY(W,H,position){switch(position){case'top':return{headlineY:H*0.12,subY:H*0.20,priceY:H*0.26};case'center':return{headlineY:H*0.42,subY:H*0.52,priceY:H*0.58};default:return{headlineY:H-720,subY:H-560,priceY:H-440};}}
+function getTextsForScene(i){const per=state.perPhotoTexts[i]||{};return{headline:per.headline||state.headline,subtext:per.subtext||state.subtext};}
+function getAnimationParams(si,progress,t){let zoom=1.06,panX=0,panY=0;switch(state.animation){case'breathe':zoom=1.05+0.08*(0.5+0.5*Math.sin(t*2));break;case'parallax':zoom=1.12;panX=Math.sin(t*0.8)*40;panY=Math.cos(t*0.5)*25;break;case'float':zoom=1.08;panX=Math.sin(t*1.5)*30;panY=Math.cos(t*1.2)*30;break;case'zoompunch':const pp=clamp(progress/0.15,0,1);const bk=progress>0.15?clamp((progress-0.15)/0.85,0,1):0;zoom=1.25-0.15*easeOut(pp)-0.05*bk;break;default:zoom=1.06+0.14*progress;panX=(si%2===0?1:-1)*30*progress;panY=(si%3===0?-1:1)*20*progress;}return{zoom,panX,panY};}
+function drawLogo(c,W,H){if(!state.logoImg)return;const size=Math.min(W,H)*0.15;const margin=40;let x=margin,y=margin;if(state.logoPos==='top-right')x=W-size-margin;if(state.logoPos==='bottom-left')y=H-size-margin;if(state.logoPos==='bottom-right'){x=W-size-margin;y=H-size-margin;}const iw=state.logoImg.naturalWidth||state.logoImg.width;const ih=state.logoImg.naturalHeight||state.logoImg.height;const sc=Math.min(size/iw,size/ih);const dw=iw*sc,dh=ih*sc;c.save();c.shadowColor='rgba(0,0,0,0.5)';c.shadowBlur=12;c.drawImage(state.logoImg,x+(size-dw)/2,y+(size-dh)/2,dw,dh);c.restore();}
+function drawBadge(c,W,H,progress){const t=state.customBadge||state.badge;if(!t)return;const a=easeOutBack(clamp(progress/0.25,0,1));if(a<=0)return;const pulse=1+0.04*Math.sin(progress*Math.PI*14);const sc=a*pulse;const cx=W-220,cy=220,bw=340,bh=96;c.save();c.translate(cx,cy);c.rotate(-0.12);c.scale(sc,sc);const g=c.createLinearGradient(-bw/2,-bh/2,bw/2,bh/2);g.addColorStop(0,state.c1);g.addColorStop(1,state.c2);c.fillStyle=g;c.shadowColor=hexToRgba(state.c1,0.7);c.shadowBlur=40;roundedRect(c,-bw/2,-bh/2,bw,bh,48);c.fill();c.shadowBlur=0;c.font=`900 38px ${state.fontFamily}, sans-serif`;c.textAlign='center';c.textBaseline='middle';c.fillStyle='#fff';c.fillText(t,0,0);c.restore();}
+
+function renderAt(t){
+  const fmt=FORMATS[state.format];
+  if(canvas.width!==fmt.w||canvas.height!==fmt.h){canvas.width=fmt.w;canvas.height=fmt.h;}
+  const W=canvas.width,H=canvas.height;
+  ctx.fillStyle=state.c3;ctx.fillRect(0,0,W,H);
+  const photos=state.photos,total=state.duration;
+  if(photos.length===0){ctx.fillStyle='#1B1B26';ctx.fillRect(0,0,W,H);drawTextShadow(ctx,'Ajoute au moins 1 photo',W/2,H/2,{size:44,color:'#8A8A99'});return;}
+  const nS=photos.length,sD=total/nS,si=clamp(Math.floor(t/sD),0,nS-1),lT=t-si*sD,pr=clamp(lT/sD,0,1);
+  const{zoom,panX,panY}=getAnimationParams(si,pr,t);
+  const cur=photos[si].img,nxt=photos[(si+1)%nS]?.img;
+  const fs=0.82,fp=pr>fs?(pr-fs)/(1-fs):0;
+  ctx.save();drawPhotoCover(ctx,cur,0,0,W,H,zoom,panX,panY);ctx.restore();
+  if(nxt&&fp>0){ctx.save();drawPhotoCover(ctx,nxt,0,0,W,H,1.05,0,0,fp);ctx.restore();}
+  if(state.template==='blackfriday'){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,0,0,0.7)');g.addColorStop(0.5,'rgba(0,0,0,0.4)');g.addColorStop(1,'rgba(0,0,0,0.9)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}else{const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'rgba(0,0,0,0.35)');g.addColorStop(0.45,'rgba(0,0,0,0)');g.addColorStop(0.75,'rgba(0,0,0,0.55)');g.addColorStop(1,'rgba(0,0,0,0.88)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);}
+  if(state.template===
